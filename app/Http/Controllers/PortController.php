@@ -28,27 +28,46 @@ class PortController extends Controller
         $pops = Pop::all();
         $dns_all = DnPorts::get();
         $overall = DB::table('dn_ports')
-            ->leftjoin('sn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
-            // ->select(DB::raw('dn_ports.name,dn_ports.description, count(sn_ports.port) as ports'))
-            ->select('dn_ports.id', 'dn_ports.name', 'dn_ports.description', 'dn_ports.location', 'dn_ports.pop', 'dn_ports.input_dbm', DB::raw('count(sn_ports.id) as ports'), 'dn_ports.pop_device_id', 'dn_ports.gpon_frame', 'dn_ports.gpon_slot', 'dn_ports.gpon_port')
-            ->when($request->general, function ($query, $general) {
-                $query->where('dn_ports.name', 'LIKE', '%' . $general . '%');
-                $query->orwhere('dn_ports.description', 'LIKE', '%' . $general . '%');
-            })
-            ->when($request->pop, function ($query, $pops) {
-                $pop_id = array();
-                foreach ($pops as $pop) {
-                    array_push($pop_id, $pop['id']);
+        ->leftJoin('sn_ports', 'sn_ports.dn_id', '=', 'dn_ports.id')
+        ->select(
+            'dn_ports.id',
+            'dn_ports.name',
+            'dn_ports.description',
+            'dn_ports.location',
+            'dn_ports.pop',
+            'dn_ports.input_dbm',
+            DB::raw('count(sn_ports.id) as ports'),
+            'dn_ports.pop_device_id',
+            'dn_ports.gpon_frame',
+            'dn_ports.gpon_slot',
+            'dn_ports.gpon_port'
+        )
+        ->when($request->general, function ($query, $general) {
+            $query->where('dn_ports.name', 'LIKE', '%' . $general . '%')
+                  ->orWhere('dn_ports.description', 'LIKE', '%' . $general . '%');
+        })
+        ->when($request->pop, function ($query, $pops) {
+            $pop_id = array_map(fn($pop) => $pop['id'], $pops);
+            $query->where(function ($q) use ($pop_id) {
+                foreach ($pop_id as $id) {
+                    $q->orWhere('dn_ports.pop', $id);
                 }
-                $query->where(function ($q) use ($pop_id) {
-                    foreach ($pop_id as $id) {
-                        $q->orWhere('dn_ports.pop', $id);
-                    }
-                });
-            })
-            ->groupBy('dn_ports.id', 'dn_ports.name', 'dn_ports.description')
-            ->orderBy('dn_ports.id')
-            ->paginate(10);
+            });
+        })
+        ->groupBy(
+            'dn_ports.id',
+            'dn_ports.name',
+            'dn_ports.description',
+            'dn_ports.location',
+            'dn_ports.pop',
+            'dn_ports.input_dbm',
+            'dn_ports.pop_device_id',
+            'dn_ports.gpon_frame',
+            'dn_ports.gpon_slot',
+            'dn_ports.gpon_port'
+        )
+        ->orderBy('dn_ports.id')
+        ->paginate(10);
         $overall->appends($request->all())->links();
         return Inertia::render(
             'Setup/Ports',

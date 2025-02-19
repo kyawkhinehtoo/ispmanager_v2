@@ -313,7 +313,7 @@ class ReceiptController extends Controller
 
                     $this->updateRRS($receipt_record->id, $receipt_record->customer_id, $dt->format("n"), $dt->format("Y"));
                 }
-                RadiusController::setExpiry($receipt_record->ftth_id, $bill_to->format('Y-m-d 23:30:00'));
+                RadiusController::setExpiry($receipt_record->ftth_id, $bill_to->format('Y-m-d 23:59:00'));
             }
         }
     }

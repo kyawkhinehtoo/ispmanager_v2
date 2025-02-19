@@ -40,6 +40,7 @@ class IncidentTaskController extends Controller
             ->where('users.disabled', '=', 0)
             ->select('users.name as name', 'users.id as id')
             ->get();
+        $user = User::find(Auth::id());
         $tasks = DB::table('tasks as t')
             ->join('incidents as i', 'i.id', 't.incident_id')
             ->join('customers as c', 'c.id', 'i.customer_id')
@@ -84,6 +85,7 @@ class IncidentTaskController extends Controller
                 'tasks' => $tasks,
                 'permission' => $permission,
                 'noc' => $noc,
+                'user' => $user,
             ]
         );
     }

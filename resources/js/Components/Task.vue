@@ -41,7 +41,7 @@
           <td class="px-6 py-3 whitespace-nowrap w-3/5">{{ (row.description.length > 50) ? row.description.substring(0,
             50)
             + ' ...' : row.description }}</td>
-          <td class="px-6 py-3 whitespace-nowrap w-1/4 ">{{ getName(row.assigned) }}</td>
+            <td class="px-6 py-3 whitespace-nowrap w-1/4 ">{{ getName(row.assigned) }}</td>
           <td class="px-6 py-3 whitespace-nowrap w-1/6 ">{{ row.target }}</td>
           <td class="px-6 py-3 whitespace-nowrap w-1/12">{{ getStatus(row.status) }}</td>
           <td class="px-6 py-3 whitespace-nowrap w-1/12 " v-if="permission[0].write_incident == 1"><a href="#"
@@ -64,7 +64,7 @@
         <div class="flex rounded-md shadow-sm">
           <div class="flex rounded-md shadow-sm w-full" v-if="noc.length !== 0">
             <multiselect deselect-label="Selected already" :options="noc" track-by="id" label="name"
-              v-model="form.assigned" :allow-empty="false"></multiselect>
+              v-model="form.assigned" :allow-empty="false"  :multiple="true"></multiselect>
           </div>
           <p v-if="$page.props.errors.assigned" class="mt-2 text-sm text-red-500">{{ $page.props.errors.assigned }}</p>
         </div>
@@ -136,8 +136,10 @@ export default {
     let edit = ref(false);
     let editMode = ref(false);
     const form = reactive({
+      id: null,
       assigned: null,
       target: null,
+      status: 1,
       description: null,
       incident_id: null,
     });
@@ -149,13 +151,14 @@ export default {
       form.id = null;
       form.assigned = null;
       form.target = null;
+      form.status = 1;
       form.description = null;
       form.incident_id = props.data
     }
     function editTask(data) {
 
       form.id = data.id;
-      form.assigned = noc.filter((d) => d.id == data.assigned)[0];;
+      form.assigned = isJsonString(data.assigned) ? JSON.parse(data.assigned) : noc.filter((d) => d.id == data.assigned)[0];
       form.description = data.description;
       form.incident_id = data.incident_id;
       form.status = data.status;
@@ -183,7 +186,7 @@ export default {
     }
     function deleteIt(data) {
       form.id = data.id;
-      form.assigned = noc.filter((d) => d.id == data.assigned)[0];;
+      form.assigned =isJsonString(data.assigned) ? JSON.parse(data.assigned) : noc.filter((d) => d.id == data.assigned)[0];
       form.description = data.description;
       form.incident_id = data.incident_id;
       form.status = 0;
@@ -226,7 +229,7 @@ export default {
     }
     function completeIt(data, status) {
       form.id = data.id;
-      form.assigned = noc.filter((d) => d.id == data.assigned)[0];;
+      form.assigned = data.assigned;
       form.description = data.description;
       form.incident_id = data.incident_id;
       form.status = status;
@@ -291,8 +294,24 @@ export default {
       }
     };
     const getName = (data) => {
-      let assign = Object(noc.filter((x) => x.id == data)[0]);
-      return assign.name;
+      if (!isJsonString(data)) {
+        let assign = Object(noc.filter((x) => x.id == data)[0]);
+        return assign.name?.match(/\b\w/g).join("");
+      } else {
+        let assign = JSON.parse(data);
+        console.log(assign);
+        if (!Array.isArray(assign) && assign instanceof Object) {
+          return assign.name?.match(/\b\w/g).join("");
+        } else {
+          let name = '' + assign.map((e) => {
+            console.log(e.name);
+            return e.name?.match(/\b\w/g).join("");
+          });
+          console.log(name);
+          return name;
+        }
+
+      }
     }
     function getStatus(data) {
       let status = "WIP";
@@ -304,6 +323,17 @@ export default {
         status = "Completed";
       }
       return status;
+    }
+    function isJsonString(str) {
+      console.log(str);
+      try {
+        const parsedValue = JSON.parse(str);
+        return typeof parsedValue === 'object' && parsedValue !== null;
+      } catch (e) {
+        console.log('not json');
+        return false;
+      }
+
     }
     const calculate = () => {
       getTask().then((d) => {

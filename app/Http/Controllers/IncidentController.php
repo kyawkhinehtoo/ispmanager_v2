@@ -294,13 +294,13 @@ class IncidentController extends Controller
         $data['actor_id'] = Auth::id();
         $this->updateStatus($request->incident_id);
         $this->insertHistory($data);
-        $notiUsers  = User::whereHas('role', function ($query) {
-            $query->where('enable_incident_notification', 1);
-        })->get();
-        $notificationMessage = 'Task Created';
-        $notificationAction = 'created';
+        // $notiUsers  = User::whereHas('role', function ($query) {
+        //     $query->where('enable_incident_notification', 1);
+        // })->get();
+        // $notificationMessage = 'Task Created';
+        // $notificationAction = 'created';
         // Send notification to users
-        Notification::send($notiUsers, new NewTaskNotification($task, $notificationMessage, $notificationAction));
+       // Notification::send($notiUsers, new NewTaskNotification($task, $notificationMessage, $notificationAction));
         return redirect()->back()->with('message', 'Task Created Successfully.');
     }
     public function editTask(Request $request, $id)
@@ -330,14 +330,14 @@ class IncidentController extends Controller
             $data['actor_id'] = Auth::id();
             $this->updateStatus($request->incident_id);
             $this->insertHistory($data);
-            $notiUsers  = User::whereHas('role', function ($query) {
-                $query->where('enable_incident_notification', 1);
-            })->get();
-            $notificationMessage = ($request->status == 0) ? 'Task Deleted' : 'Task Updated';
-            $notificationAction = ($request->status == 0) ? 'deleted' : 'updated';
-            // Send notification to users
-            Notification::send($notiUsers, new NewTaskNotification($task, $notificationMessage, $notificationAction));
-            return redirect()->back()->with('message', 'Task Updated Successfully.');
+            // $notiUsers  = User::whereHas('role', function ($query) {
+            //     $query->where('enable_incident_notification', 1);
+            // })->get();
+            // $notificationMessage = ($request->status == 0) ? 'Task Deleted' : 'Task Updated';
+            // $notificationAction = ($request->status == 0) ? 'deleted' : 'updated';
+            // // Send notification to users
+            // Notification::send($notiUsers, new NewTaskNotification($task, $notificationMessage, $notificationAction));
+             return redirect()->back()->with('message', 'Task Updated Successfully.');
         }
     }
     function isJsonObject($jsonString)
@@ -380,18 +380,7 @@ class IncidentController extends Controller
             }
         }
     }
-    // public function getIncidentById($id){
-    //     $incidents =  DB::table('incidents')
-    //     ->join('customers', 'incidents.id', '=', 'customers.id')
-    //     ->join('townships', 'customers.township_id', '=', 'townships.id')
-    //     ->when($request->keyword, function ($query, $search = null) {
-    //         $query->where('customers.name', 'LIKE', '%' . $search . '%')
-    //             ->orWhere('customers.ftth_id', 'LIKE', '%' . $search . '%');
-    //     })
-    //     ->select('incidents.code as code','incidents.date as date','incidents.status as status','customers.ftth_id as ftth_id')
-    //     ->paginate(10);
-    //     return Inertia::render('Client/Incident', ['incidents' => $incidents]);
-    // }
+
 
     public function store(Request $request)
     {
@@ -482,10 +471,10 @@ class IncidentController extends Controller
                     'customers.id as customer_id',
                 )->first();
             // broadcast(new AddIncident($incident_data))->toOthers();
-            $notiUsers  = User::whereHas('role', function ($query) {
-                $query->where('enable_incident_notification', 1);
-            })->get();
-            Notification::send($notiUsers, new NewIncidentNotification($incident, 'Incident Created', 'created'));
+            // $notiUsers  = User::whereHas('role', function ($query) {
+            //     $query->where('enable_incident_notification', 1);
+            // })->get();
+            // Notification::send($notiUsers, new NewIncidentNotification($incident, 'Incident Created', 'created'));
             return redirect()->route('incident.index')->with('message', 'Incident Created Successfully.')
                 ->with('id', $incident->id);
             return redirect()->route('incident.index')->with('message', 'Incident Created Successfully.')
@@ -589,13 +578,13 @@ class IncidentController extends Controller
 
                 $incident->closed_by = Auth::user()->id;
                 $incident->update();
-                $notiUsers  = User::whereHas('role', function ($query) {
-                    $query->where('enable_incident_notification', 1);
-                })->get();
-                $notificationMessage = ($request->status == 4) ? 'Incident Deleted' : 'Incident Updated';
-                $notificationAction = ($request->status == 4) ? 'deleted' : 'updated';
+                // $notiUsers  = User::whereHas('role', function ($query) {
+                //     $query->where('enable_incident_notification', 1);
+                // })->get();
+                // $notificationMessage = ($request->status == 4) ? 'Incident Deleted' : 'Incident Updated';
+                // $notificationAction = ($request->status == 4) ? 'deleted' : 'updated';
                 // Send notification to users
-                Notification::send($notiUsers, new NewIncidentNotification($incident, $notificationMessage, $notificationAction));
+                // Notification::send($notiUsers, new NewIncidentNotification($incident, $notificationMessage, $notificationAction));
             }
 
             return redirect()->route('incident.index')->with('message', 'Incident Updated Successfully.');

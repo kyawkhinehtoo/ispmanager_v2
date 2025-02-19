@@ -11,7 +11,7 @@
             </span>
             <input type="text" placeholder="ID/Description"
               class="pl-10 pr-12 py-2.5 w-full rounded-lg overflow-hidden text-sm text-litepie-secondary-700 placeholder-litepie-secondary-400 transition-colors bg-white border border-litepie-secondary-300 focus:border-litepie-primary-300 focus:ring focus:ring-litepie-primary-500 focus:ring-opacity-10 focus:outline-none dark:bg-litepie-secondary-800 dark:border-litepie-secondary-700 dark:text-litepie-secondary-100 dark:placeholder-litepie-secondary-500 dark:focus:border-litepie-primary-500 dark:focus:ring-opacity-20"
-              id="search" tabindex="1" v-model="search" v-on:keyup.enter="searchTask" />
+              id="search" tabindex="1" v-model="search" @keyup.enter="searchTask" />
           </div>
           <div class="flex w-full">
             <button
@@ -302,10 +302,9 @@
 import AppLayout from "@/Layouts/IncidentLayout";
 import NoData from "@/Components/NoData";
 import Pagination from "@/Components/Pagination";
-import { ref, onMounted, reactive, inject } from "vue";
+import { ref, onMounted, reactive, inject ,provide} from "vue";
 import Multiselect from "@suadelabs/vue3-multiselect";
-import { useForm,router } from "@inertiajs/inertia-vue3";
-
+import { router, Link } from "@inertiajs/vue3";
 export default {
   name: "IncidentTask",
   components: {
@@ -313,6 +312,7 @@ export default {
     Pagination,
     Multiselect,
     NoData,
+    Link,
   },
   props: {
     tasks: Object,
@@ -339,7 +339,7 @@ export default {
       month: "MMM",
     });
     let isOpen = ref(false);
-
+    provide("user", props.user);
 
     const form = reactive({
       id: null,
@@ -417,7 +417,7 @@ export default {
     function saveTask() {
       if (editMode.value != true) {
         form._method = "POST";
-        Inertia.post("/addTask", form, {
+        router.post("/addTask", form, {
           preserveState: true,
           onSuccess: (page) => {
             edit.value = false;
@@ -433,7 +433,7 @@ export default {
         });
       } else {
         form._method = "PUT";
-        Inertia.post("/editTask/" + form.id, form, {
+        router.post("/editTask/" + form.id, form, {
           onSuccess: (page) => {
             edit.value = false;
             editMode.value = false;
@@ -465,8 +465,8 @@ export default {
       return status;
     }
     function searchTask() {
-
-      Inertia.get(url, { keyword: search.value, status: search_status.value, task: task_user.value }, { preserveState: true });
+      let url = "/mytask/";
+      router.get(url, { keyword: search.value, status: search_status.value, task: task_user.value }, { preserveState: true });
     }
     function changeStatus() {
       let url = "/mytask/";
@@ -479,7 +479,7 @@ export default {
       if (task_user.value != "") {
         url = url + "&task=" + task_user.value;
       }
-      Inertia.get(url, { keyword: search.value }, { preserveState: true });
+      router.get(url, { keyword: search.value }, { preserveState: true });
     }
     function goWIP() {
       search_status.value = 1;

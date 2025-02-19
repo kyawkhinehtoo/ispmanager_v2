@@ -8,53 +8,59 @@
     </Head>
 
     <!-- Sidebar Navigation -->
-    <nav class="sm:h-screen overflow-y-auto  sm:fixed sm:top-0 sm:left-0 w-full sm:w-64 dark:bg-gray-900 p-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200">
-      <div class="w-full flex justify-between items-center  shadow-none shadow-gray-300 shadow-left">
-        <a href="javascript:void(0)" class="text-gray-400 flex w-full ">
-          <img
-            v-if="$page.props.logo_small"
-            :src="`/storage/${$page.props.logo_small}`"
-            alt="Logo"
-            class="w-16"
-          />
-          <span class="font-bold text-md w-full self-center text-center">{{ $page.props.application_name }}</span>
+    <nav :class="[
+      'sm:h-screen overflow-y-auto sm:fixed sm:top-0 sm:left-0 transition-all duration-300 z-50',
+      isCollapsed ? 'sm:w-20' : 'sm:w-64',
+      'dark:bg-gray-900 p-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200'
+    ]">
+      <div class="w-full flex justify-between items-center shadow-none shadow-gray-300 shadow-left">
+        <a href="javascript:void(0)" class="text-gray-400 flex items-center">
+          <img v-if="$page.props.logo_small" :src="`/storage/${$page.props.logo_small}`" alt="Logo" class="w-16" />
+          <span v-if="!isCollapsed" class="font-bold text-md w-full self-center text-center">
+            {{ $page.props.application_name }}
+          </span>
         </a>
         <button class="text-black md:hidden" @click="toggleSidebar">
           <i class="fas fa-bars"></i>
         </button>
+        <button @click="toggleCollapse" class="text-gray-500 hidden md:block">
+          <i :class="isCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+        </button>
       </div>
 
       <!-- Menu Links -->
-      <div :class="{ hidden: !sidebarOpen }" class="md:flex md:flex-col mt-4 w-full grid grid-cols-1 gap-2 ">
-        <!-- <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')" >
-          <i class="fas fa-tv mr-2"></i> Dashboard
-        </jet-nav-link> -->
-
-        <!-- Dynamic Panels -->
+      <div :class="{ hidden: !sidebarOpen }" class="md:flex md:flex-col mt-4 w-full grid grid-cols-1 gap-2">
         <ExpandableMenu
           v-for="panel in panels"
           :key="panel.name"
+          :name="panel.name"
           :label="panel.label"
+          :icon="panel.icon"
           :isOpen="panel.isOpen"
+          :isCollapsed="isCollapsed"
           @toggle="togglePanel(panel.name)"
         >
-
-  
-       
           <jet-nav-link v-for="link in panel.links" :key="link.name"
             :href="route(link.route)"
             :active="checkActive(link.route)"
+            :isCollapsed="isCollapsed" 
+            class="flex items-center px-3"
           >
-            <i :class="link.icon" class="w-4"></i> {{ link.name }}
+            <i :class="[link.icon, 'min-w-[20px]']"></i> 
+            <span>
+              {{ link.name }}
+            </span>
           </jet-nav-link>
-         
-
         </ExpandableMenu>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="relative md:ml-64 bg-gray-100 dark:bg-gray-900 h-screen overflow-auto  scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100">
+    <div :class="[
+      'relative transition-all duration-300 z-0',
+      isCollapsed ? 'md:ml-20' : 'md:ml-64',
+      'bg-gray-100 dark:bg-gray-900 h-screen overflow-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100'
+    ]">
       <!-- Page Header -->
       <header class="relative w-full bg-blue-900 md:flex-row md:flex-nowrap md:justify-start flex items-center py-4" :style="{ backgroundColor: $page.props.theme_color }"
       v-if="$slots.header">
@@ -134,6 +140,7 @@
   </div>
 </template>
 <script>
+import { ref } from 'vue';
 import JetNavLink from "@/Jetstream/NavLink.vue";
 import ExpandableMenu from "@/Components/ExpandableMenu.vue";
 import { Head } from "@inertiajs/vue3";
@@ -147,13 +154,25 @@ export default {
     JetDropdown,
     JetDropdownLink,
   },
+  
+  provide() {
+    const activeSubmenu = ref(null);
+    return {
+      activeSubmenu,
+      setActiveSubmenu: (name) => {
+        activeSubmenu.value = name;
+      },
+    };
+  },
   data() {
     return {
       sidebarOpen: false,
+      isCollapsed: localStorage.getItem('sidebarCollapsed') === 'true',
       panels: [
         {
           name: "admin",
           label: "Admin",
+          icon:"fas fa-user-tie",
           isOpen: false, // Tracks if the panel is open
           links: [
             { name: "User Setup", route: "user.index", icon: "fas fa-user mr-2" },
@@ -181,6 +200,7 @@ export default {
         {
           name: "user",
           label: "User Panel",
+          icon:"fas fa-users",
           isOpen: false,
           links: [
             { name: "Dashboard", route: "dashboard", icon: "fas fa-tv mr-2" },
@@ -192,6 +212,7 @@ export default {
         {
           name: "billing",
           label: "Billing Panel",
+          icon:"fas fa-file-invoice",
           isOpen: false,
           links: [
             { name: "Bill Generator", route: "billGenerator", icon: "fas fa-cogs mr-2" },
@@ -203,6 +224,7 @@ export default {
         {
           name: "report",
           label: "Report Panel",
+          icon:"fas fa-chart-line",
           isOpen: false,
           links: [
             { name: "Incident Report", route: "incidentReport", icon: "fas fa-users mr-2" },
@@ -217,51 +239,50 @@ export default {
   },
   computed: {
     isAdmin() {
-      return this.$page.props.role.id === 1 || this.$page.props.role.id === 2;
+      return this.$page.props?.role?.id === 1 || this.$page.props?.role?.id === 2;
     },
   },
   methods: {
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
-
+    toggleCollapse() {
+      this.isCollapsed = !this.isCollapsed;
+      localStorage.setItem("sidebarCollapsed", this.isCollapsed);
+    },
     togglePanel(panelName) {
       this.panels = this.panels.map((panel) => ({
         ...panel,
-        isOpen: panel.name === panelName ? !panel.isOpen : false, // Close all others
+        isOpen: panel.name === panelName ? !panel.isOpen : false,
       }));
     },
     openPanelForRoute() {
-    const currentRoute = route().current().split('.')[0]; // Extract root namespace
-        this.panels.forEach((panel) => {
-          console.log("Current Rote",currentRoute)
-          panel.isOpen = panel.links.some((link) => {
-            console.log("Link ",link.route.split('.')[0]);
-            return currentRoute === link.route.split('.')[0];
-          });
+      const currentRoute = route().current().split(".")[0];
+      this.panels.forEach((panel) => {
+        panel.isOpen = panel.links.some((link) => currentRoute === link.route.split(".")[0]);
       });
     },
-    checkActive(link){
-      const currentRoute = route().current().split('.')[0]; // Extract root namespace
-      const currentLink = link.split('.')[0];
-      return currentRoute === currentLink;
+    checkActive(link) {
+      const currentRoute = route().current().split(".")[0];
+      return currentRoute === link.split(".")[0];
     },
     logout() {
       this.$inertia.post(route("logout"));
     },
-
   },
   created() {
-    this.openPanelForRoute(); // Trigger on component creation
+    this.openPanelForRoute();
   },
   watch: {
-    '$page.props': {
+    "$page.props": {
       deep: true,
       handler() {
-        this.openPanelForRoute(); // Trigger on route change
+        this.openPanelForRoute();
       },
     },
   },
 };
 </script>
+
+
 

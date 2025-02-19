@@ -5,6 +5,7 @@ import { Link } from '@inertiajs/vue3';
 const props = defineProps({
     href: String,
     active: Boolean,
+    isCollapsed: Boolean,
 });
 
 const classes = computed(() => {
@@ -15,7 +16,10 @@ const classes = computed(() => {
 </script>
 
 <template>
-    <Link :href="href" class="text-xs uppercase py-3 px-4 font-bold block rounded-md mt-1"  :class="classes" :style="props.active? { color: $page.props.accent_color }:''">
+    <Link :href="href" class="py-2 text-xs" :class="classes" :style="props.active? { color: $page.props.accent_color }:''" v-if="isCollapsed">
+        <slot />
+    </Link>
+    <Link :href="href" class="text-xs uppercase py-3 px-4 font-bold block rounded-md mt-1"  :class="classes" :style="props.active? { color: $page.props.accent_color }:''" v-else>
         <slot />
     </Link>
 </template>

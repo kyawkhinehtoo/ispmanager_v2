@@ -536,6 +536,7 @@ class RadiusController extends Controller
             $today = new DateTime('now');
             // $today->modify('last day of this month');
             $today->modify('+3  day');
+            $today->setTime(23, 59, 0);
             $user_data['expiration'] = ($data->service_off_date) ? $data->service_off_date : $today;
             $user_data['uptimelimit'] = 0;
             $user_data['srvid'] = 0;

@@ -25,10 +25,18 @@
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                                    <i class="fas fa-arrow-up-right-from-square text-blue-600 mr-2"></i>   Dashboard 
+                            <div class="hidden space-x-2 sm:-my-px sm:ml-10 sm:flex">
+                               
+                                <jet-nav-link :href="route('dashboard')">
+                                     <i class="fa fas fa-home"></i>
                                 </jet-nav-link>
+                                <jet-nav-link :href="route('incident.index')" :active="route().current('incident.*')">
+                                    Ticket
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('mytask.index')" :active="route().current('mytask.*')">
+                                    My Task
+                                </jet-nav-link>
+                                
                             </div>
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
