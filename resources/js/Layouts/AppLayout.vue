@@ -9,27 +9,27 @@
 
     <!-- Sidebar Navigation -->
     <nav :class="[
-      'sm:h-screen overflow-y-auto sm:fixed sm:top-0 sm:left-0 transition-all duration-300 z-50',
-      isCollapsed ? 'sm:w-20' : 'sm:w-64',
+      'sm:h-screen overflow-y-auto sm:fixed sm:top-0 sm:left-0 transition-all duration-300 md:overflow-y-auto md:overflow-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200',
+      isCollapsed ? 'sm:w-20 z-10' : 'sm:w-64',
       'dark:bg-gray-900 p-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200'
     ]">
       <div class="w-full flex justify-between items-center shadow-none shadow-gray-300 shadow-left">
-        <a href="javascript:void(0)" class="text-gray-400 flex items-center">
+        <a href="javascript:void(0)" class="text-gray-400 flex items-center w-full">
           <img v-if="$page.props.logo_small" :src="`/storage/${$page.props.logo_small}`" alt="Logo" class="w-16" />
-          <span v-if="!isCollapsed" class="font-bold text-md w-full self-center text-center">
+          <span v-if="!isCollapsed" class="font-bold text-md  self-center text-center w-full">
             {{ $page.props.application_name }}
           </span>
         </a>
         <button class="text-black md:hidden" @click="toggleSidebar">
           <i class="fas fa-bars"></i>
         </button>
-        <button @click="toggleCollapse" class="text-gray-500 hidden md:block">
-          <i :class="isCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+        <button @click="toggleCollapse" class="text-blue-900 hidden w-4 md:block focus:ring-0 focus:outline-none -mr-4">
+          <i :class="isCollapsed ? 'fas fa-caret-right' : 'fas fa-caret-left'"></i>
         </button>
       </div>
-
+      
       <!-- Menu Links -->
-      <div :class="{ hidden: !sidebarOpen }" class="md:flex md:flex-col mt-4 w-full grid grid-cols-1 gap-2">
+      <div :class="{ hidden: !sidebarOpen }" class="md:flex md:flex-col mt-4 w-full grid grid-cols-1 gap-2  ">
         <ExpandableMenu
           v-for="panel in panels"
           :key="panel.name"
@@ -57,7 +57,7 @@
 
     <!-- Main Content -->
     <div :class="[
-      'relative transition-all duration-300 z-0',
+      'relative transition-all duration-300',
       isCollapsed ? 'md:ml-20' : 'md:ml-64',
       'bg-gray-100 dark:bg-gray-900 h-screen overflow-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100'
     ]">

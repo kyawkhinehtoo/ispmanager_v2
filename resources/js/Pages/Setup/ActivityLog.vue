@@ -9,13 +9,13 @@
     <div class="py-2">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-2 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-2 w-full ">
           <div class="col-span-1 sm:col-span-1">
             <label for="sh_general" class="block text-sm font-medium text-gray-700">General </label>
 
-            <div class="mt-1 flex rounded-md ">
+            <div class="mt-1 flex rounded-md">
               <span
-                class="z-10 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
+                class="z-0 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                 <i class="fas fa-user"></i>
               </span>
               <input type="text" v-model="searchForm.general" name="sh_general" id="sh_general"
@@ -26,8 +26,8 @@
           </div>
           <div class="col-span-1 sm:col-span-1">
             <label for="sh_dn" class="block text-sm font-medium text-gray-700">Type </label>
-            <div class="mt-1 z-30">
-              <multiselect deselect-label="Selected already" :options="options" v-model="searchForm.option"
+            <div class="mt-1 z-10">
+              <multiselect deselect-label="Selected already" :options="options" v-model="searchForm.option" 
                 :allow-empty="true" placeholder="Please Choose Type">
               </multiselect>
             </div>

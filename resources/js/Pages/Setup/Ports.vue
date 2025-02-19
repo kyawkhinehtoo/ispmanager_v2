@@ -8,7 +8,7 @@
     <div class="py-2">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex justify-between space-x-2 items-end mb-2 px-1 md:px-0">
-          <div class="relative flex flex-wrap">
+          <div class="relative flex flex-wrap z-0">
             <div v-if="pops.length !== 0">
               <multiselect deselect-label="Selected already" :options="pops" track-by="id" label="site_name"
                 v-model="search.pop" :allow-empty="true" :multiple="true" placeholder="Select Multiple POP site"

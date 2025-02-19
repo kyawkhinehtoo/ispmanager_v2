@@ -14,7 +14,7 @@
 
     <!-- Submenu for collapsed state -->
     <div v-if="isCollapsed" 
-      class="fixed left-20 top-0 min-w-[200px] bg-indigo-50 shadow-lg"
+      class="fixed left-20 top-5 min-w-[200px] bg-indigo-50 shadow-lg"
       :class="{ 'hidden': !showSubmenu || activeSubmenu !== name }">
       <div>
         <h6 class="px-2 py-2 text-xs font-bold text-gray-600 uppercase bg-indigo-50">

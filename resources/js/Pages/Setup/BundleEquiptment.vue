@@ -9,12 +9,12 @@
     <div class="py-2">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex justify-between space-x-2 items-end mb-2 px-1 md:px-0">
-          <div class="relative flex flex-wrap ">
+          <div class="relative flex flex-wrap z-0 ">
             <span
-              class="z-10 h-full leading-snug font-normal absolute text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"><i
+              class="z-10 h-full leading-snug font-normal  text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"><i
                 class="fas fa-search"></i></span>
             <input type="text" placeholder="Search here..."
-              class="border-0 px-3 py-3 placeholder-gray-300 text-gray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+              class="border-0 px-3 py-3 placeholder-gray-300 text-gray-600 relative  bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
               id="search" v-model="search" v-on:keyup.enter="searchTsp">
           </div>
           <button @click="openModal"

@@ -18,7 +18,9 @@ class PackageController extends Controller
     {
         $packages = Package::when($request->package, function ($query, $pkg) {
             $query->where('name', 'LIKE', '%' . $pkg . '%');
-        })->paginate(10);
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(10);
 
         $radius_services = null;
         $radius = new RadiusController();
