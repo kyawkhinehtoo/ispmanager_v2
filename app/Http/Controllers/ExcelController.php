@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ActivityLogExport;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Exports\CustomersExport;
@@ -21,6 +22,8 @@ use App\Imports\CustomersUpdate;
 use App\Imports\DNUpdate;
 use App\Imports\SNUpdate;
 use App\Imports\TempBillingUpdate;
+use App\Imports\PackageImport;
+use App\Imports\PackageUpdate;
 use Excel;
 use Storage;
 use Illuminate\Support\Facades\Session;
@@ -63,7 +66,10 @@ class ExcelController extends Controller
     {
         return view('excel.snupdate');
     }
-
+    public function updatePackageView(){
+   
+        return view('excel.packageupdate');
+    }
 
     /**
      * @return \Illuminate\Support\Collection
@@ -103,6 +109,10 @@ class ExcelController extends Controller
     public function exportPublicIpReportExcel(Request $request)
     {
         return FacadesExcel::download(new PublicIpExport($request), 'publicIp.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+    public function exportActivityLogExcel(Request $request)
+    {
+        return FacadesExcel::download(new ActivityLogExport($request), 'activitylog.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
     /**
      * @return \Illuminate\Support\Collection
@@ -181,6 +191,14 @@ class ExcelController extends Controller
     public function importSN(Request $request)
     {
         Excel::import(new SNUpdate, $request->import_file);
+
+        Session::put('success', 'Your file is imported successfully in database.');
+
+        return back();
+    }
+    public function importPackage(Request $request)
+    {
+        Excel::import(new PackageUpdate, $request->import_file);
 
         Session::put('success', 'Your file is imported successfully in database.');
 

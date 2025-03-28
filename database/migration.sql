@@ -9,7 +9,7 @@ insert into migrations VALUES (null,'2025_01_07_040953_add_role_into_user',1);
 
 
 -- 18 January 2025 10:01:21 PM
-ALTER TABLE `dk_imdb`.`customers`
+ALTER TABLE `customers`
 CHANGE `pop_device_id` `pop_device_id` bigint unsigned NULL;
 
 ALTER TABLE customers
@@ -33,6 +33,19 @@ ADD CONSTRAINT fk_pop_device_id FOREIGN KEY (pop_device_id)
 REFERENCES pop_devices(id)
 ON DELETE SET NULL;
 
+
+
+ALTER TABLE `customer_histories`
+CHANGE `general` `general` blob NULL;
+
+ALTER TABLE `email_templates`
+DROP COLUMN `default`;
+
+ALTER TABLE `short_urls`
+ADD COLUMN `forward_query_params` varchar(255) NULL AFTER `deactivated_at`;
+
+#// migrate database 
+
 UPDATE customers AS c
 JOIN sn_ports AS s      ON c.sn_id = s.id
 JOIN dn_ports AS d      ON s.dn_id = d.id
@@ -42,12 +55,3 @@ SET
     c.pop_id         = p.id,
     c.pop_device_id  = pd.id,
     c.dn_id          = d.id
-
-ALTER TABLE `customer_histories`
-CHANGE `general` `general` blob NULL;
-
-ALTER TABLE `dk_imdb`.`email_templates`
-DROP COLUMN `default`;
-
-ALTER TABLE `dk_imdb`.`short_urls`
-ADD COLUMN `forward_query_params` varchar(255) NULL AFTER `deactivated_at`;

@@ -19,12 +19,12 @@
           <button @click="openModal"
             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Create</button>
         </div>
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" v-if="packages.data">
+        <div class="bg-white overflow-auto shadow-xl sm:rounded-lg" v-if="packages.data">
           <!-- <button @click="openModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3">Create New package</button>
                  <input class="w-half rounded py-2 my-3 float-right" type="text" placeholder="Search package" v-model="search" v-on:keyup.enter="searchTsp">
                     -->
 
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="min-w-full divide-y divide-gray-200 text-xs">
             <thead class="bg-gray-50">
               <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

@@ -487,7 +487,7 @@ class RadiusController extends Controller
                 $res = $client->post($url, ['headers' => $header], ['connect_timeout' => 1]);
                 $response = json_decode($res->getBody());
                 if ($response) {
-                    return json_encode($response->data, 200);
+                    return $response->data; // Remove json_encode since the data is already in the correct format
                 }
             } catch (\Throwable $e) {
                 return null;

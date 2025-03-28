@@ -84,6 +84,8 @@ Route::group(['middleware'=>['auth','role']],function(){
 	Route::get('updateSNView',[ExcelController::class,'updateSNView'])->name('updateSNView');
 	Route::post('importDN',[ExcelController::class,'importDN'])->name('importDN');
 	Route::post('importSN',[ExcelController::class,'importSN'])->name('importSN');
+	Route::get('updatePackageView',[ExcelController::class,'updatePackageView'])->name('updatePackageView');
+	Route::post('importPackage',[ExcelController::class,'importPackage'])->name('importPackage');
 
 
 	Route::get('/getpackage/{id}',[PackageController::class,'getBundle']);
@@ -256,6 +258,8 @@ Route::group(['middleware'=>['auth','role']],function(){
 	Route::get('/mytask/{id}', [IncidentTaskController::class,'index']);
 
 	Route::get('sync_radius',[CustomerController::class,'syncRadius'])->name('sync_radius');
+
+	Route::post('/exportActivityLogExcel',[ExcelController::class,'exportActivityLogExcel'])->name('exportActivityLogExcel');
 });
 
 Route::get('/s/{shortURLKey}', '\AshAllenDesign\ShortURL\Controllers\ShortURLController');

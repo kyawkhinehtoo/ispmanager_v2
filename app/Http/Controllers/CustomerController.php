@@ -25,6 +25,7 @@ use Inertia\Inertia;
 use DateTime;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
@@ -756,6 +757,93 @@ class CustomerController extends Controller
             }
         }
         echo "Done";
+    }
+    public function importRadius(){
+        if (RadiusController::checkRadiusEnable()) {
+            $radiusController = new RadiusController();
+            $radiusUsers = $radiusController->getRadiusUser();
+
+            if ($radiusUsers) {
+                foreach($radiusUsers as $radiusUser) {
+                    echo $radiusUser->username.PHP_EOL;
+                    $customer = Customer::where('ftth_id', trim($radiusUser->username))->first();
+                    $phone = trim($radiusUser->phone);
+                    if(trim($radiusUser->mobile) != ''){
+                        $phone.= $phone? '|'.trim($radiusUser->mobile): trim($radiusUser->mobile);
+                    }
+                    $phone = (trim($phone)=='|')?'':$phone;
+                    $date = new DateTime();
+                    $date->modify('-1 year');
+                    $township_id = 0;
+                    if($radiusUser->state && trim($radiusUser->state) != '-- YANGON --'){
+                        $township = Township::where('name', $radiusUser->state)->first();
+                        if($township){
+                            $township_id = $township->id;
+                        }
+                    }else{
+                        $township = Township::where('name', 'No Township')->first();
+                        $township_id = $township->id;
+                    }
+                    $pacakge_id=0;
+              
+                        $package = Package::where('radius_package', $radiusUser->srvid)->first();
+                        if($package){
+                            $pacakge_id = $package->id;
+                        }
+                  
+                   
+                    if ($customer) {
+                        $customer->ftth_id = trim($radiusUser->username);
+                        $customer->name = trim($radiusUser->firstname);
+                        $customer->phone_1 = $phone;
+                        $customer->email = $radiusUser->email;
+                        $customer->address = $radiusUser->address;
+                        $customer->location = $radiusUser->gpslat.','.$radiusUser->gpslong;
+                        $customer->order_date = $date->format('Y-m-d H:i:s');
+                        $customer->installation_date = $date->format('Y-m-d H:i:s');
+                        $customer->service_activation_date = $date->format('Y-m-d H:i:s');
+                        $customer->prefer_install_date = $date->format('Y-m-d H:i:s');
+                        $customer->sale_remark = $radiusUser->comment;
+                        $customer->township_id = $township_id;
+                        $customer->package_id = $pacakge_id;
+                        $customer->sale_person_id = 2;
+                        $customer->status_id = ($radiusUser->enableuser)? 2: 4;
+                        $customer->deleted = 0;
+                        $customer->pppoe_account = $radiusUser->username;
+                        $customer->project_id = 1;
+                        $customer->service_off_date = $radiusUser->expiration ? Carbon::parse($radiusUser->expiration)->format('Y-m-d H:i:s') : null;
+                        $customer->installation_remark = $radiusUser->custattr;
+                        $customer->update();
+                       
+                    } else {
+                        $customer = new Customer();
+                        $customer->ftth_id = trim($radiusUser->username);
+                        $customer->name = trim($radiusUser->firstname);
+                        $customer->phone_1 = $phone;
+                        $customer->email = $radiusUser->email;
+                        $customer->address = $radiusUser->address;
+                        $customer->location = $radiusUser->gpslat.','.$radiusUser->gpslong;
+                        $customer->order_date = $date->format('Y-m-d H:i:s');
+                        $customer->installation_date = $date->format('Y-m-d H:i:s');
+                        $customer->service_activation_date = $date->format('Y-m-d H:i:s');
+                        $customer->prefer_install_date = $date->format('Y-m-d H:i:s');
+                        $customer->sale_remark = $radiusUser->comment;
+                        $customer->township_id = $township_id;
+                        $customer->package_id = $pacakge_id;
+                        $customer->sale_person_id = 2;
+                        $customer->status_id = ($radiusUser->enableuser)? 2 : 4;
+                        $customer->deleted = 0;
+                        $customer->pppoe_account = $radiusUser->username;
+                        $customer->project_id = 1;
+                        $customer->service_off_date = $radiusUser->expiration ? Carbon::parse($radiusUser->expiration)->format('Y-m-d H:i:s') : null;
+                        $customer->installation_remark = $radiusUser->custattr;
+                        $customer->save();
+                       // echo $customer->ftth_id.'Created!'.PHP_EOL;
+                    }
+                }
+                echo "Done";
+            }
+        }
     }
     public function destroy(Request $request, $id)
     {

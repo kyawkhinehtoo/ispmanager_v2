@@ -7,49 +7,52 @@
     </template>
 
     <div class="py-2">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
 
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-2 w-full ">
-          <div class="col-span-1 sm:col-span-1">
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-2 w-full items-end">
+          <div class="col-span-1 ">
             <label for="sh_general" class="block text-sm font-medium text-gray-700">General </label>
 
-            <div class="mt-1 flex rounded-md">
+            <div class="mt-1 flex rounded-md w-full bg-gray-500">
               <span
                 class="z-0 leading-snug font-normal  text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2">
                 <i class="fas fa-user"></i>
               </span>
               <input type="text" v-model="searchForm.general" name="sh_general" id="sh_general"
-                class="pl-10 py-2 focus:ring-0 flex-1 block w-full rounded-md sm:text-sm border-gray-200 text-gray-600"
+                class="pl-10 py-2.5 focus:ring-0 flex-1 block w-full rounded-md sm:text-sm border-gray-200 text-gray-600"
                 placeholder="General" tabindex="1" />
             </div>
-
           </div>
-          <div class="col-span-1 sm:col-span-1">
-            <label for="sh_dn" class="block text-sm font-medium text-gray-700">Type </label>
-            <div class="mt-1 z-10">
-              <multiselect deselect-label="Selected already" :options="options" v-model="searchForm.option" 
-                :allow-empty="true" placeholder="Please Choose Type">
-              </multiselect>
+          <div class="col-span-1 md:col-span-3 grid md:grid-cols-2 gap-2 ">
+           <div>
+              <label for="sh_dn" class="block text-sm font-medium text-gray-700">Type </label>
+              <div class="mt-1 z-10">
+                <multiselect deselect-label="Selected already" :options="options" v-model="searchForm.option" :multiple="false"
+                  :allow-empty="true" placeholder="Choose Type">
+                </multiselect>
+              </div>
             </div>
-
-          </div>
-          <div class="col-span-1 sm:col-span-2">
-            <label for="dateRange" class="block text-sm font-medium text-gray-700">Date Range </label>
-            <div class="mt-1 text-xs">
-             
-             <VueDatePicker v-model="searchForm.dateRange" :range="{ partialRange: false }" placeholder="Please choose Date Range" 
-                :enable-time-picker="false" model-type="yyyy-MM-dd" id="dateRange"
-                class="text-gray-400 text-sm focus:ring focus:ring-indigo-500 focus:border-indigo-500 focus:ring-opacity-10 focus:outline-none" />
+            <div>
+              <label for="dateRange" class="block text-sm font-medium text-gray-700">Date Range </label>
+              <div class="mt-1 text-xs">
+               
+               <VueDatePicker v-model="searchForm.dateRange" :range="{ partialRange: false }" placeholder="Please choose Date Range" 
+                  :enable-time-picker="false" model-type="yyyy-MM-dd" id="dateRange"
+                  class="text-gray-400 text-sm focus:ring focus:ring-indigo-500 focus:border-indigo-500 focus:ring-opacity-10 focus:outline-none" />
+              </div>
             </div>
-
-          </div>
-          <div class="col-span-1 sm:col-span-1 flex self-end mb-1">
+         </div>
+          <div class="col-span-1 sm:col-span-2 flex space-x-2 justify-end pb-1 ">
             <a @click="searchPort"
-              class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Search
+              class="cursor-pointer inline-flex items-center px-4 py-2.5 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">Search
               <i class="ml-1 fa fa-search text-white" tabindex="6"></i></a>
             <a @click="resetSearch"
-              class="ml-2 cursor-pointer inline-flex items-center px-4 py-2 bg-yellow-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:border-yellow-900 focus:ring focus:ring-yellow-300 disabled:opacity-25 transition">Reset
+              class="cursor-pointer inline-flex items-center px-4 py-2.5  bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:border-yellow-900 focus:ring focus:ring-yellow-300 disabled:opacity-25 transition">Reset
               <i class="ml-1 fa fa-eraser text-white" tabindex="7"></i>
+            </a>
+              <a @click="doExcel"
+              class="cursor-pointer inline-flex items-center px-4 py-2.5 bg-green-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:border-yellow-900 focus:ring focus:ring-green-300 disabled:opacity-25 transition">
+              Export <i class="ml-1 fa fa-file-excel text-white" tabindex="8"></i>
             </a>
           </div>
         </div>
@@ -173,17 +176,32 @@ export default {
       searchForm.reset();
       searchPort();
     }
-    return { expandedRow, toggleDetails, searchForm, options, searchPort, resetSearch, formatter };
+    function doExcel() {
+
+    axios.post("/exportActivityLogExcel", searchForm, { responseType: "blob" }).then((response) => {
+      console.log(response);
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      var blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `activity_${new Date().getTime()}.xlsx`;
+      link.click();
+    });
+    }
+    return { expandedRow, toggleDetails, searchForm, options, searchPort, resetSearch, formatter,doExcel };
   }
 
 
 
 }
 </script>
-<style>
-.multiselect__tags {
-
-  padding: 5px 40px 0 5px !important;
-
+<style scoped>
+:deep(.dp__input) {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 </style>
