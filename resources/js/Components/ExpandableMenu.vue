@@ -1,5 +1,5 @@
 <template>
-  <div class="relative group">
+  <div class="relative group" v-if="showPanel">
     <button @click="toggleSubmenu" 
       class="w-full flex items-center justify-between p-2 transition-colors text-gray-600 hover:gray-blue-500 text-xs uppercase py-3 font-bold  rounded-md bg-blueGray-100 shadow-sm cursor-pointer focus:border-none "
       :class="[isCollapsed ? 'px-3':'px-4']">
@@ -20,14 +20,14 @@
         <h6 class="px-2 py-2 text-xs font-bold text-gray-600 uppercase bg-indigo-50">
           {{ label }} 
         </h6>
-        <slot></slot>
+        <slot :showCondition="true"></slot>
       </div>
     </div>
 
     <!-- Regular submenu when not collapsed -->
     <div v-else v-show="isOpen" 
       class="mt-1 space-y-1">
-      <slot></slot>
+      <slot :showCondition="true"></slot>
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@
 export default {
   props: {
     label: String,
+    showPanel: Boolean,
     icon: String,
     isOpen: Boolean,
     isCollapsed: Boolean,

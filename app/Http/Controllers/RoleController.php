@@ -64,6 +64,7 @@ class RoleController extends Controller
         $role->activity_log = $request->activity_log;
         $role->enable_customer_export = $request->enable_customer_export;
         $role->system_setting = $request->system_setting;
+        $role->dnsn_report = $request->dnsn_report;
 
         $role->save();
         return redirect()->route('role.index')->with('message', 'Role Created Successfully.');
@@ -117,6 +118,7 @@ class RoleController extends Controller
             $role->activity_log = $request->activity_log;
             $role->system_setting = $request->system_setting;
             $role->enable_customer_export = $request->enable_customer_export;
+            $role->dnsn_report = $request->dnsn_report;
             $role->update();
             return redirect()->back()
                 ->with('message', 'Role Updated Successfully.');

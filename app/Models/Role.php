@@ -87,6 +87,7 @@ class Role extends Model
         'radius_report' => 'integer',
         'incident_only' => 'integer',
         'enable_customer_export' => 'integer',
+        'dnsn_report' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp'
     ];

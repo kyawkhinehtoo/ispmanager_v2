@@ -263,6 +263,12 @@
                                 type="checkbox" v-model="form.ip_report" />
                               View IP Usage Report
                             </label>
+                            <label class="inline-flex ml-2">
+                              <input
+                                class="text-red-500 w-6 h-6 mr-2 focus:ring-red-400 focus:ring-opacity-25 border border-gray-300 rounded"
+                                type="checkbox" v-model="form.dnsn_report" />
+                              DN SN Report
+                            </label>
 
                           </div>
                         </fieldset>
@@ -343,6 +349,7 @@ export default {
       enable_customer_export: null,
       activity_log: null,
       system_setting: null,
+      dnsn_report: null,
     });
     const search = ref("");
     let editMode = ref(false);
@@ -373,6 +380,7 @@ export default {
       form.enable_customer_export = null;
       form.activity_log = null;
       form.system_setting = null;
+      form.dnsn_report = null;
     }
     function submit() {
       if (!editMode.value) {
@@ -440,6 +448,7 @@ export default {
       form.enable_customer_export = (data.enable_customer_export) ? true : false;
       form.activity_log = (data.activity_log) ? true : false;
       form.system_setting = (data.system_setting) ? true : false;
+      form.dnsn_report = (data.dnsn_report) ? true : false;
       editMode.value = true;
       openModal();
     }

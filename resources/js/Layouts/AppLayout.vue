@@ -38,17 +38,22 @@
           :icon="panel.icon"
           :isOpen="panel.isOpen"
           :isCollapsed="isCollapsed"
+          :showPanel="showPanel(panel.name)"
           @toggle="togglePanel(panel.name)"
+         
         >
-          <jet-nav-link v-for="link in panel.links" :key="link.name"
+          <jet-nav-link 
+             v-for="link in panel.links.filter(link => link.show)"
+             :key="link.name"
             :href="route(link.route)"
             :active="checkActive(link.route)"
             :isCollapsed="isCollapsed" 
             class="flex items-center px-3"
+       
           >
             <i :class="[link.icon, 'min-w-[20px]']"></i> 
             <span>
-              {{ link.name }}
+              {{ link.name }} 
             </span>
           </jet-nav-link>
         </ExpandableMenu>
@@ -175,26 +180,26 @@ export default {
           icon:"fas fa-user-tie",
           isOpen: false, // Tracks if the panel is open
           links: [
-            { name: "User Setup", route: "user.index", icon: "fas fa-user mr-2" },
-            { name: "Role Setup", route: "role.index", icon: "fas fa-user-tag mr-2" },
-            { name: "City Setup", route: "city.index", icon: "fas fa-city mr-2" },
-            { name: "Township Setup", route: "township.index", icon: "fas fa-city mr-2" },
-            { name: "Bundle Setup", route: "equiptment.index", icon: "fas fa-gamepad mr-2" },
-            { name: "Subcom Setup", route: "subcom.index", icon: "fas fa-handshake mr-2" },
-            { name: "POP Setup", route: "pop.index", icon: "fas fa-building mr-2" },
-            { name: "DN Setup", route: "port.index", icon: "fas fa-server mr-2" },
-            { name: "SN Setup", route: "snport.index", icon: "fas fa-network-wired mr-2" },
-            { name: "SLA Setup", route: "sla.index", icon: "fas fa-percentage mr-2" },
-            { name: "Package Setup", route: "package.index", icon: "fas fa-cube mr-2" },
-            { name: "Project Setup", route: "project.index", icon: "fas fa-handshake mr-2" },
-            { name: "Customer Status", route: "status.index", icon: "fas fa-user-tag mr-2" },
-            { name: "Template", route: "template.index", icon: "fas fa-envelope mr-2" },
-            { name: "Announcement", route: "announcement.list", icon: "fas fa-bullhorn mr-2" },
-            { name: "SMS Gateway", route: "smsgateway.index", icon: "fas fa-sms mr-2" },
-            { name: "Radius Config", route: "radiusconfig.index", icon: "fas fa-sms mr-2" },
-            { name: "Billing Config", route: "billconfig.index", icon: "fas fa-sms mr-2" },
-            { name: "Activity Log", route: "activity-log.index", icon: "fas fa-circle-info mr-2" },
-            { name: "System Setting", route: "setting.index", icon: "fas fa-screwdriver-wrench mr-2" },
+            { show:this.$page.props.role.id==1, name: "User Setup", route: "user.index", icon: "fas fa-user mr-2" },
+            { show:this.$page.props.role.id==1, name: "Role Setup", route: "role.index", icon: "fas fa-user-tag mr-2" },
+            { show:this.$page.props.role.id==1, name: "City Setup", route: "city.index", icon: "fas fa-city mr-2" },
+            { show:this.$page.props.role.id==1, name: "Township Setup", route: "township.index", icon: "fas fa-city mr-2" },
+            { show:this.$page.props.role.id==1, name: "Bundle Setup", route: "equiptment.index", icon: "fas fa-gamepad mr-2" },
+            { show:this.$page.props.role.id==1, name: "Subcom Setup", route: "subcom.index", icon: "fas fa-handshake mr-2" },
+            { show:this.$page.props.role.id==1, name: "POP Setup", route: "pop.index", icon: "fas fa-building mr-2" },
+            { show:this.$page.props.role.id==1, name: "DN Setup", route: "port.index", icon: "fas fa-server mr-2" },
+            { show:this.$page.props.role.id==1, name: "SN Setup", route: "snport.index", icon: "fas fa-network-wired mr-2" },
+            { show:this.$page.props.role.id==1, name: "SLA Setup", route: "sla.index", icon: "fas fa-percentage mr-2" },
+            { show:this.$page.props.role.id==1, name: "Package Setup", route: "package.index", icon: "fas fa-cube mr-2" },
+            { show:this.$page.props.role.id==1, name: "Project Setup", route: "project.index", icon: "fas fa-handshake mr-2" },
+            { show:this.$page.props.role.id==1, name: "Customer Status", route: "status.index", icon: "fas fa-user-tag mr-2" },
+            { show:this.$page.props.role.id==1, name: "Template", route: "template.index", icon: "fas fa-envelope mr-2" },
+            { show:this.$page.props.role.id==1, name: "Announcement", route: "announcement.list", icon: "fas fa-bullhorn mr-2" },
+            { show:this.$page.props.role.id==1, name: "SMS Gateway", route: "smsgateway.index", icon: "fas fa-sms mr-2" },
+            { show:this.$page.props.role.id==1, name: "Radius Config", route: "radiusconfig.index", icon: "fas fa-sms mr-2" },
+            { show:this.$page.props.role.id==1, name: "Billing Config", route: "billconfig.index", icon: "fas fa-sms mr-2" },
+           
+            { show:this.$page.props.role.id==1, name: "System Setting", route: "setting.index", icon: "fas fa-screwdriver-wrench mr-2" },
           ],
         },
         {
@@ -203,10 +208,10 @@ export default {
           icon:"fas fa-users",
           isOpen: false,
           links: [
-            { name: "Dashboard", route: "dashboard", icon: "fas fa-tv mr-2" },
-            { name: "Customer", route: "customer.index", icon: "fas fa-users mr-2" },
-            { name: "Service Request", route: "servicerequest.index", icon: "fas fa-tasks mr-2" },
-            { name: "Incident Panel", route: "incident.index", icon: "fas fa-arrow-up-right-from-square mr-2 text-blue-600" },
+            { show:true, name: "Dashboard", route: "dashboard", icon: "fas fa-tv mr-2" },
+            { show:true, name: "Customer", route: "customer.index", icon: "fas fa-users mr-2" },
+            { show:true, name: "Service Request", route: "servicerequest.index", icon: "fas fa-tasks mr-2" },
+            { show:true, name: "Incident Panel", route: "incident.index", icon: "fas fa-arrow-up-right-from-square mr-2 text-blue-600" },
           ],
         },
         {
@@ -215,10 +220,10 @@ export default {
           icon:"fas fa-file-invoice",
           isOpen: false,
           links: [
-            { name: "Bill Generator", route: "billGenerator", icon: "fas fa-cogs mr-2" },
-            { name: "Temp Bill List", route: "tempBilling", icon: "fas fa-clipboard-list mr-2" },
-            { name: "Final Bill List", route: "showbill", icon: "fas fa-coins mr-2" },
-            { name: "Bill Receipt", route: "receipt.index", icon: "fas fa-file-invoice-dollar mr-2" },
+            { show:this.$page.props.role.bill_generation == 1, name: "Bill Generator", route: "billGenerator", icon: "fas fa-cogs mr-2" ,   },
+            { show:this.$page.props.role.bill_generation == 1, name: "Temp Bill List", route: "tempBilling", icon: "fas fa-clipboard-list mr-2" },
+            { show:this.$page.props.role.bill_generation == 1, name: "Final Bill List", route: "showbill", icon: "fas fa-coins mr-2" },
+            { show:this.$page.props.role.bill_receipt == 1, name: "Bill Receipt", route: "receipt.index", icon: "fas fa-file-invoice-dollar mr-2" },
           ],
         },
         {
@@ -227,11 +232,12 @@ export default {
           icon:"fas fa-chart-line",
           isOpen: false,
           links: [
-            { name: "Incident Report", route: "incidentReport", icon: "fas fa-users mr-2" },
-            { name: "Bill Report", route: "dailyreceipt", icon: "fa fa-money-bill mr-2" },
-            { name: "Radius User Report", route: "showRadius", icon: "fas fa-server mr-2" },
-            { name: "IP Usages Report", route: "publicIpReport", icon: "fas fa-server mr-2" },
-            { name: "DN SN Report", route: "dnSnReport", icon: "fas fa-tower-broadcast mr-2" },
+            { show:this.$page.props.role.incident_report == 1, name: "Incident Report", route: "incidentReport", icon: "fas fa-users mr-2" },
+            { show:this.$page.props.role.bill_report == 1, name: "Bill Report", route: "dailyreceipt", icon: "fa fa-money-bill mr-2" },
+            { show:this.$page.props.role.radius_report == 1, name: "Radius User Report", route: "showRadius", icon: "fas fa-server mr-2" },
+            { show:this.$page.props.role.ip_report == 1, name: "IP Usages Report", route: "publicIpReport", icon: "fas fa-server mr-2" },
+            { show:this.$page.props.role.dnsn_report == 1, name: "DN SN Report", route: "dnSnReport", icon: "fas fa-tower-broadcast mr-2" },
+            { show:this.$page.props.role.activity_log==1, name: "Activity Log", route: "activity-log.index", icon: "fas fa-circle-info mr-2" },
           ],
         },
       ],
@@ -239,8 +245,10 @@ export default {
   },
   computed: {
     isAdmin() {
-      return this.$page.props?.role?.id === 1 || this.$page.props?.role?.id === 2;
+      console.log("Role ID:",this.$page.props?.user?.role.id);
+      return this.$page.props?.user?.role.id === 1;
     },
+   
   },
   methods: {
     toggleSidebar() {
@@ -265,6 +273,20 @@ export default {
     checkActive(link) {
       const currentRoute = route().current().split(".")[0];
       return currentRoute === link.split(".")[0];
+    },
+    showPanel(panelName) {
+      switch (panelName) {
+        case 'admin':
+          return this.$page.props?.role.id == 1? true : false; 
+        case 'billing':
+          return this.$page.props?.role.bill_generation == 1? true : false;
+        case 'report':
+          return (this.$page.props?.role.incident_report == 1 || this.$page.props?.role.bill_report == 1 || this.$page.props?.user?.role.radius_report == 1 || this.$page.props?.role.ip_report == 1)? true : false;
+        case 'user':
+          return true;
+      }
+      
+    
     },
     logout() {
       this.$inertia.post(route("logout"));
