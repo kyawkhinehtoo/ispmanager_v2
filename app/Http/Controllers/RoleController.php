@@ -65,6 +65,7 @@ class RoleController extends Controller
         $role->enable_customer_export = $request->enable_customer_export;
         $role->system_setting = $request->system_setting;
         $role->dnsn_report = $request->dnsn_report;
+        $role->is_admin = $request->is_admin;
 
         $role->save();
         return redirect()->route('role.index')->with('message', 'Role Created Successfully.');
@@ -119,6 +120,7 @@ class RoleController extends Controller
             $role->system_setting = $request->system_setting;
             $role->enable_customer_export = $request->enable_customer_export;
             $role->dnsn_report = $request->dnsn_report;
+            $role->is_admin = $request->is_admin;
             $role->update();
             return redirect()->back()
                 ->with('message', 'Role Updated Successfully.');

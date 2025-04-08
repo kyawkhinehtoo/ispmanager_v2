@@ -88,6 +88,7 @@ class Role extends Model
         'incident_only' => 'integer',
         'enable_customer_export' => 'integer',
         'dnsn_report' => 'integer',
+        'is_admin' => 'integer',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp'
     ];

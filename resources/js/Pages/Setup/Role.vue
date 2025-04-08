@@ -70,7 +70,12 @@
                           id="name" placeholder="Enter Role Name" v-model="form.name" />
                         <div v-if="$page.props.errors.name" class="text-red-500">{{ $page.props.errors.name[0] }}</div>
                       </div>
-
+                      <label class="inline-flex text-sm">
+                        <input
+                          class="text-blue-500 text-sm w-6 h-6 mr-2 focus:ring-blue-400 focus:ring-opacity-25 border border-blue-300 rounded"
+                          type="checkbox" v-model="form.is_admin" />
+                        Administrator
+                      </label>
                       <div class="mb-4">
                         <fieldset class="mt-4 border border-solid border-gray-300 p-3 rounded-md">
                           <legend class="text-gray-700 text-sm font-bold">Customer Data </legend>
@@ -350,6 +355,7 @@ export default {
       activity_log: null,
       system_setting: null,
       dnsn_report: null,
+      is_admin:null,
     });
     const search = ref("");
     let editMode = ref(false);
@@ -381,6 +387,7 @@ export default {
       form.activity_log = null;
       form.system_setting = null;
       form.dnsn_report = null;
+      form.is_admin = null;
     }
     function submit() {
       if (!editMode.value) {
@@ -449,6 +456,7 @@ export default {
       form.activity_log = (data.activity_log) ? true : false;
       form.system_setting = (data.system_setting) ? true : false;
       form.dnsn_report = (data.dnsn_report) ? true : false;
+      form.is_admin = (data.is_admin) ? true : false;
       editMode.value = true;
       openModal();
     }
