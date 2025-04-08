@@ -385,8 +385,8 @@
                   <div class="col-span-1 sm:col-span-1">
                     <label for="fiber_distance" class="block text-sm font-medium text-gray-700"> Please Choose SN
                     </label>
-                    <div class="mt-1 flex rounded-md shadow-sm" v-if="snPortNoOptions">
-                      <multiselect deselect-label="Selected already" :options="snPortNoOptions" track-by="id"
+                    <div class="mt-1 flex rounded-md shadow-sm" v-if="snOptions">
+                      <multiselect deselect-label="Selected already" :options="snOptions" track-by="id"
                       label="name" v-model="form.sn_id" :allow-empty="true" :disabled="checkPerm('sn_id')">
                     </multiselect>
                     </div>
