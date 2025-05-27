@@ -35,21 +35,23 @@ class PDFCreateJob implements ShouldQueue
      */
     public function handle()
     {
+        $headerHtml = view('templates.invoiceheader')->render();
         $invoice = Invoice::join('customers', 'invoices.customer_id', 'customers.id')
             ->join('packages', 'customers.package_id', 'packages.id')
             ->where('invoices.id', '=', $this->invoice_id)
             ->select('invoices.*', 'packages.type as service_type')
             ->first();
         $options = [
+            'format' => 'A4',
             'default_font_size' => '11',
             'orientation'   => 'P',
             'encoding'      => 'UTF-8',
-            'margin_top'  => 45,
+            'margin_top'  => 85,
             'title' => $invoice->ftth_id,
         ];
         $name = date("ymdHis") . '-' . $invoice->bill_number . ".pdf";
         $path = $invoice->ftth_id . '/' . $name;
-        $pdf = $this->createPDF($options, 'invoice', $invoice, $name, $path);
+        $pdf = $this->createPDF($options, 'invoice', $invoice, $name, $path,$headerHtml);
 
         if ($pdf['status'] == 'success') {
 

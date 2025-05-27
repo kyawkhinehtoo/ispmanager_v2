@@ -252,13 +252,7 @@ class ReceiptController extends Controller
     public function makeReceiptPDF(Request $request)
     {
 
-        // $receipt =  ReceiptRecord::join('invoices', 'receipt_records.invoice_id', '=', 'invoices.id')
-        // ->leftjoin('users', 'users.id', '=', 'receipt_records.receipt_person')
-        // ->join('customers', 'receipt_records.customer_id', 'customers.id')
-        // ->join('packages', 'customers.package_id', 'packages.id')
-        // ->where('receipt_records.id', '=', $request->id)
-        // ->select('invoices.*', 'packages.type as service_type','receipt_records.id', 'receipt_records.remark as remark', 'receipt_records.collected_amount as collected_amount', 'receipt_records.receipt_date as receipt_date', 'receipt_records.receipt_number as receipt_number','receipt_records.receipt_file','receipt_records.receipt_url' ,'users.name as collector')
-        // ->first();
+        $headerHtml = view('templates.receiptheader')->render();
         $receipt = ReceiptRecord::where('receipt_records.id', '=', $request->id)
             ->join('invoices', 'invoices.id', '=', 'receipt_records.invoice_id')
             ->select('invoices.*', 'receipt_records.*', DB::raw('DATE_FORMAT(receipt_records.receipt_date,"%Y-%m-%d") as receipt_date_2'))
@@ -267,8 +261,7 @@ class ReceiptController extends Controller
             'default_font_size' => '11',
             'orientation'   => 'P',
             'encoding'      => 'UTF-8',
-            'margin_top'  => 45,
-            'margin_bottom'  => 1,
+            'margin_top'  => 85,
             'title' => $receipt->ftth_id,
         ];
 
@@ -276,7 +269,7 @@ class ReceiptController extends Controller
 
         $name = date("ymdHis") . '-R' . $receipt->bill_number . ".pdf";
         $path = $receipt->ftth_id . '/' . $name;
-        $pdf = $this->createPDF($options, 'receipt', $receipt, $name, $path);
+        $pdf = $this->createPDF($options, 'receipt', $receipt, $name, $path,$headerHtml);
         if ($pdf['status'] == 'success') {
             // Successfully stored. Return the full path.
             $receipt->receipt_file =  $pdf['disk_path'];

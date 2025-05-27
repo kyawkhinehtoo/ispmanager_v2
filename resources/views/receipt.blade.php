@@ -51,8 +51,8 @@
     }
 
     table.header td {
-        width: 50%;
-        padding: 5px;
+        font-size:1em;
+        vertical-align: top;
     }
 
     .text-bold {
@@ -113,7 +113,8 @@
         width: auto;
         padding: 10px;
         color: #484848;
-        font-weight: 600;
+        font-weight: 400;
+        font-size: 1rem;
     }
 
     tr td.fix {
@@ -180,22 +181,17 @@
         text-align: left;
     }
 
-    .header_warapper div {
-        float: left;
-        width: calc(50% - 10px);
-        padding: 10px 5px;
-        font-size: medium;
-        font-weight: bold;
-    }
+  
 
-    .header_warapper {
+    .header_warapper{
         float: left;
         position: relative;
-        width: calc(100% - 2px);
-        border: 1px solid #000000;
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin:25px 0;
         border-bottom: 0;
+        background:#CFEEFFFF;
     }
-
     td.title {
         text-align: right;
     }
@@ -224,56 +220,50 @@
     $receipt_no = "REC".substr($bill_number,0, 4).str_pad($receipt_number,5,"0", STR_PAD_LEFT);
     @endphp
     <div class="container">
-        <htmlpageheader name="page-header">
-            <img src="{{ public_path('storage/images/invoice-header.png') }}" class="banner-img" />
-        </htmlpageheader>
-        <div class="header">
-            <h2 class="title">Receipt</h2>
-        </div>
+      
 
 
         <div class="center">
             <div class="header_warapper">
-                <table class="header">
+                <table class="header" with="100%">
                     <tr>
-                        <td>Customer Name : {{$bill_to}}</td>
-                        <td>Receipt No. : {{$receipt_no}}</td>
+                        <td width="20%">Customer Name </td><td width="30%; ">: {{$bill_to}}</td> <td width="15%">Receipt No. </td><td width="35%">: {{$receipt_no}}</td>
+                    </tr> 
+                    <tr>
+                        <td>Customer ID </td><td>: {{$ftth_id}} <td>Invoice No. </td><td>: {{$invoice_no}} </td>
                     </tr>
                     <tr>
-                        <td>Customer ID : {{$ftth_id}}</td>
-                        <td>Invoice No. : {{$invoice_no}}</td>
+                        <td rowspan="2">Address </td><td rowspan="2">: {{$attn}}</td> <td>Date </td><td>: {{ date("j F Y",strtotime($receipt_date)) }}</td>
                     </tr>
                     <tr>
-                        <td rowspan="2">Address : {{$attn}}</td>
-                        <td>Date : {{ date("j F Y",strtotime($receipt_date)) }}</td>
+                        
+                        <td>Package </td><td>: {{$service_description}}</td>
                     </tr>
                     <tr>
-                        <td>Package : {{$service_description}}</td>
-                    </tr>
-                    <tr>
-                        <td>Contact No. : {{$phone}}</td>
-                        <td>Internet Speed : {{$qty}}</td>
+                        <td>Contact No. </td><td>: {{$phone}}</td>
+                        <td>Internet Speed </td><td>: {{$qty}}</td>
                     </tr>
                 </table>
-            </div>
 
+            </div>
 
             <table class="collapse" style="width:100%; ">
 
-                <tr>
+                <tr style="background-color: #D8D7D7FF;">
                     <td style="width:10%">No.</td>
                     <td colspan="2" style="width:40%">Description</td>
                     <td style="width:10%">Qty</td>
-                    <td style="width:20%">Price (THB)</td>
-                    <td style="width:20%">Total Amount (THB)</td>
+                    <td style="width:20%;text-align:right;">Price (MMK)</td>
+                    <td style="width:20%;text-align:right;">Total (MMK)</td>
                 </tr>
+
 
                 <tr>
                     <td>1</td>
                     <td colspan="2">{{$service_description}} </td>
                     <td>1</td>
-                    <td>{{number_format($normal_cost,2,'.')}}</td>
-                    <td>{{number_format($sub_total,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($normal_cost,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($sub_total,2,'.')}}</td>
                 </tr>
                 @php
                 if($discount){
@@ -284,7 +274,7 @@
                     <td></td>
 
                     <td></td>
-                    <td>{{number_format($discount,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($discount,2,'.')}}</td>
                 </tr>
                 @php
                 }
@@ -294,22 +284,22 @@
                 <tr>
 
                     <td class="title" colspan="5">Subtotal</td>
-                    <td>{{number_format($sub_total,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($sub_total,2,'.')}}</td>
                 </tr>
                 <tr>
 
                     <td class="title" colspan="5">Discount</td>
-                    <td>{{number_format($discount,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($discount,2,'.')}}</td>
                 </tr>
                 <tr>
 
                     <td class="title" colspan="5">Commercial Tax</td>
-                    <td>{{number_format($tax,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($tax,2,'.')}}</td>
                 </tr>
                 <tr>
 
                     <td class="title" colspan="5">Grand Total </td>
-                    <td>{{number_format($total_payable,2,'.')}}</td>
+                    <td style="text-align:right;">{{number_format($total_payable,2,'.')}}</td>
                 </tr>
                 <tr>
                     <td class="left" colspan="6">Period : {{$period_covered}}</td>
@@ -338,9 +328,7 @@
             </table>
 
         </div>
-        <htmlpagefooter name="page-footer">
-            <img src="{{ public_path('storage/images/invoice-footer.png') }}" class="banner-img" />
-        </htmlpagefooter>
+    
     </div>
 </body>
 

@@ -10,15 +10,26 @@ use Illuminate\Support\Facades\Storage;
 use AshAllenDesign\ShortURL\Classes\Builder;
 trait PdfTrait
 {
-    public function createPDF($options, $template, $data, $name, $path)
+    public function createPDF($options, $template, $data, $name, $path,$headerHtml = null, $footerHtml = null)
     {
+        $headerHtml = $headerHtml?? view('templates.invoiceheader')->render();
+        $footerHtml = $footerHtml?? view('templates.footer')->render();
 
         view()->share($template, $data);
 
         $pdf = PDF::loadView($template, $data, [], $options);
-        $pdf->getMpdf()->AddPage();
-        $pdf->getMpdf()->SetDisplayMode('fullpage', 'two');
-        $pdf->getMpdf()->WriteHTML((string)view($template, $data, [], $options));
+
+        $mpdf = $pdf->getMpdf();
+        $mpdf->SetHTMLHeader($headerHtml);
+        $mpdf->SetHTMLFooter($footerHtml);
+        // Optional: Add a new page
+        // $mpdf->AddPage();
+
+        // Set display mode
+        $mpdf->SetDisplayMode('fullpage', 'default');
+
+        // Write the HTML content
+        //$mpdf->WriteHTML(view($template, $data)->render());
         $output = $pdf->output();
 
         $disk = Storage::disk('public');

@@ -65,7 +65,24 @@
         .container {
             width: 100%;
         }
-
+        .bannerbar{
+            width: 100%;
+            background-color: #57c2fb;
+            padding: 0 0;
+            text-align: right;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .bannerbar label{
+            padding:5px 15px;
+            background: #fff;
+            margin-right: 10%;
+            color: #1e3a8a;
+            font-weight: 400;
+            text-transform: uppercase;
+            font-family: 'Times New Roman', Times, serif;
+        }
         .center {
             margin: 0 auto;
             width: 85%;
@@ -133,7 +150,7 @@
             width: auto;
             padding: 10px;
             color: #484848;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         tr td.fix {
@@ -211,14 +228,16 @@
             width: calc(50% - 10px);
             padding:10px 5px;
             font-size: small;
-            font-weight: bold;
+            font-weight: 200;
         }
        .header_warapper{
             float: left;
             position: relative;
-            width: calc(100% - 2px);
-            border:1px solid #000000;
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin:10px 0;
             border-bottom: 0;
+            background:#CFEEFFFF;
        }
        
     </style>
@@ -241,11 +260,13 @@
     <div class="container">
         <div class="header">
             <img src="{{ asset('storage/images/invoice-header.png') }}" class="header-img" />
-            <h2 class="title">Receipt</h2>
+         
         </div>
-    
+        <div class="center" style="margin-top:10px;"><label>📞 09-9491 70 150,&nbsp; 09-9491 70 151,&nbsp; 09-9491 70 152</label><label>&nbsp;&nbsp;
+            ✉️ sales@yamsuccessofmyanmar.com</label> </div>
+       <div class="bannerbar"> <label for="invoice">Invoice</label></div>
        
-        <div class="center" style="margin-top:5px;">
+        <div class="center">
         <div class="header_warapper">
                     <div>Customer Name :  {{$bill_to}}</div>
                     <div>Receipt No. :  {{$receipt_no}}</div>
@@ -258,6 +279,7 @@
                     <div>Contact No. : {{$phone}}</div>
                     <div>Internet Speed : {{$qty}}</div>
             </div>
+           
        <table class="collapse" style=" width:100%; ">
                <tbody>
                

@@ -57,8 +57,8 @@
     }
 
     table.header td {
-        width: 50%;
-        padding: 5px;
+        font-size: 0.8em;
+        vertical-align: top;
     }
 
     .text-bold {
@@ -119,7 +119,8 @@
         width: auto;
         padding: 10px;
         color: #484848;
-        font-weight: 600;
+        font-weight: 400;
+        font-size: 0.9rem;
     }
 
     tr td.fix {
@@ -195,27 +196,22 @@
         width: 100%;
         text-align: left;
     }
+   
 
-    .header_warapper div {
-        float: left;
-        width: calc(50% - 10px);
-        padding: 10px 5px;
-        font-size: medium;
-        font-weight: bold;
-    }
-
-    .header_warapper {
+    .header_warapper{
         float: left;
         position: relative;
-        width: calc(100% - 2px);
-        border: 1px solid #000000;
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin:25px 0;
         border-bottom: 0;
+        background:#CFEEFFFF;
     }
 
     td.title {
         text-align: right;
     }
-
+   
     .thankyou {
         padding: 25px 0;
         color: #1e3a8a;
@@ -249,66 +245,48 @@
     $invoice_no = "INV".substr($bill_number,0, 4).str_pad($invoice_number,5,"0", STR_PAD_LEFT);
     @endphp
     <div class="container">
-        <htmlpageheader name="page-header">
-
-            <img src="{{ public_path('storage/images/invoice-header.png') }}" class="header-img" />
-        </htmlpageheader>
-        <div class="header">
-            <h2 class="title">Invoice</h2>
-        </div>
+    
         <div class="center">
 
             <div class="header_warapper">
-                <table class="header">
+                <table class="header" with="100%">
                     <tr>
-                        <td colspan="2">Customer Name : {{$bill_to}}</td>
+                        <td width="20%">Customer Name </td><td width="30%; ">: {{$bill_to}}</td> <td width="15%">Receipt No. </td><td width="35%">: NA </td>
+                    </tr> 
+                    <tr>
+                        <td>Customer ID </td><td>: {{$ftth_id}} <td>Invoice No. </td><td>: {{$invoice_no}} </td>
                     </tr>
                     <tr>
-                        <td colspan="2">Customer ID : {{$ftth_id}}</td>
+                        <td rowspan="2">Address </td><td rowspan="2">: {{$attn}}</td> <td>Date </td><td>: {{ date("j F Y",strtotime($date_issued)) }}</td>
                     </tr>
                     <tr>
-                        <td>Invoice No. : {{$invoice_no}}</td>
-                        <td>Address : {{$attn}}</td>
+                        
+                        <td>Package </td><td>: {{$service_description}}</td>
                     </tr>
                     <tr>
-                        <td>Date : {{ date("j F Y",strtotime($date_issued)) }}</td>
-                        <td>Package : {{$service_description}}</td>
-                    </tr>
-                    <tr>
-                        <td>Contact No. : {{$phone}}</td>
-                        <td>Internet Speed : {{$qty}}</td>
+                        <td>Contact No. </td><td>: {{$phone}}</td>
+                        <td>Internet Speed </td><td>: {{$qty}}</td>
                     </tr>
                 </table>
 
             </div>
 
-
-
-
-
-            <!-- </tbody>
-       </table>
-                        <table class="collapse" style="margin-top:0px; width:100%; ">
-                        <thead>
-
-                        </thead>
-                        <tbody> -->
             <table class="collapse" style="width:100%; ">
                 <tbody>
-                    <tr>
+                    <tr style="background-color: #D8D7D7FF;">
                         <td style="width:10%">No.</td>
-                        <td style="width:50%">Description</td>
+                        <td style="width:40%">Description</td>
                         <td style="width:10%">Qty</td>
-                        <td style="width:15%">Price (THB)</td>
-                        <td style="width:15%">Total Amount (THB)</td>
+                        <td style="width:20%;text-align:right;">Price (MMK)</td>
+                        <td style="width:20%;text-align:right;">Total (MMK)</td>
                     </tr>
 
                     <tr>
                         <td>1</td>
-                        <td>{{$service_description}} for <br /> {{$period_covered}} </td>
+                        <td>{{$service_description}}</td>
                         <td>1</td>
-                        <td>{{number_format($normal_cost,2,'.')}}</td>
-                        <td>{{number_format($sub_total,2,'.')}}</td>
+                        <td style="text-align:right;">{{number_format($normal_cost,2,'.')}}</td>
+                        <td style="text-align:right;">{{number_format($sub_total,2,'.')}}</td>
                     </tr>
                     @php
                     if($discount){
@@ -318,8 +296,8 @@
                         <td>Discount </td>
                         <td>1</td>
 
-                        <td>{{number_format($discount,2,'.')}}</td>
-                        <td>{{number_format($discount,2,'.')}}</td>
+                        <td style="text-align:right;">{{number_format($discount,2,'.')}}</td>
+                        <td style="text-align:right;">{{number_format($discount,2,'.')}}</td>
                     </tr>
                     @php
                     }
@@ -332,26 +310,26 @@
                     <tr>
 
                         <td class="title" colspan="4">Subtotal</td>
-                        <td class="text">{{number_format($sub_total,2,'.')}}</td>
+                        <td class="text" style="text-align:right;">{{number_format($sub_total,2,'.')}}</td>
                     </tr>
                     <tr>
 
                         <td class="title" colspan="4">Discount</td>
-                        <td class="text">{{number_format($discount,2,'.')}}</td>
+                        <td class="text" style="text-align:right;">{{number_format($discount,2,'.')}}</td>
                     </tr>
                     <tr>
 
                         <td class="title" colspan="4">Commercial Tax</td>
-                        <td class="text">{{number_format($tax,2,'.')}}</td>
+                        <td class="text" style="text-align:right;">{{number_format($tax,2,'.')}}</td>
                     </tr>
                     <tr>
 
                         <td class="title" colspan="4">Grand Total </td>
-                        <td class="text">{{number_format($total_payable,2,'.')}}</td>
+                        <td class="text" style="text-align:right;">{{number_format($total_payable,2,'.')}}</td>
                     </tr>
                     <tr>
-                        <td colspan="5">
-                            <p class="thankyou">Thank you Choosing Our Services !</p>
+                        <td colspan="5" style="text-align:left;">
+                            Period Covered: <span class="text-bold">{{$period_covered}}</span>
                         </td>
                     </tr>
 
@@ -365,9 +343,7 @@
 
 
         </div>
-        <htmlpagefooter name="page-footer">
-            <img src="{{ public_path('storage/images/invoice-footer.png') }}" class="header-img" />
-        </htmlpagefooter>
+       
 
 </body>
 

@@ -9,7 +9,7 @@ return [
     'margin_right'             => 0,
     'margin_top'               => 0,
     'margin_bottom'            => 0,
-    'margin_header'            => 2,
+    'margin_header'            => 0,
     'margin_footer'            => 0,
     'orientation'              => 'P',
     'title'                    => 'Laravel mPDF',

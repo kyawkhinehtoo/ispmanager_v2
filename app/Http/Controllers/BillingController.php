@@ -1080,7 +1080,7 @@ class BillingController extends Controller
     }
     public function makeSinglePDF(Request $request)
     {
-
+        $headerHtml = view('templates.invoiceheader')->render();
         $invoice = Invoice::join('customers', 'invoices.customer_id', 'customers.id')
             ->join('packages', 'customers.package_id', 'packages.id')
             ->where('invoices.id', '=', $request->id)
@@ -1091,12 +1091,12 @@ class BillingController extends Controller
             'default_font_size' => '11',
             'orientation'   => 'P',
             'encoding'      => 'UTF-8',
-            'margin_top'  => 45,
+            'margin_top'  => 85,
             'title' => $invoice->ftth_id,
         ];
         $name = date("ymdHis") . '-' . $invoice->bill_number . ".pdf";
         $path = $invoice->ftth_id . '/' . $name;
-        $pdf = $this->createPDF($options, 'invoice', $invoice, $name, $path);
+        $pdf = $this->createPDF($options, 'invoice', $invoice, $name, $path,$headerHtml);
         $invoice_no = "INV" . substr($invoice->bill_number, 0, 4) . str_pad($invoice->invoice_number, 5, "0", STR_PAD_LEFT);
         if ($pdf['status'] == 'success') {
 
@@ -1124,6 +1124,7 @@ class BillingController extends Controller
     public function makeAllPDF(Request $request)
     {
         // dd($request);
+        
         $invoices =  Invoice::join('customers', 'customers.id', '=', 'invoices.customer_id')
             ->join('packages', 'customers.package_id', '=', 'packages.id')
             ->where('invoices.total_payable', '>', 0)

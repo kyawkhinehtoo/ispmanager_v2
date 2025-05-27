@@ -609,8 +609,10 @@ class CustomerController extends Controller
                         $customer->$value = $request->sn_id['id'];
                 }
                 if ($value == 'dn_id') {
-                    if (!empty($request->dn_id))
+                    if (!empty($request->dn_id)){
                         $customer->$value = $request->dn_id['id'];
+                    }
+                      
                 }
                 if ($value == 'pop_id') {
                     if (isset($request->pop_id['id']))
