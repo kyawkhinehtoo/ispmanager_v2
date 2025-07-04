@@ -131,6 +131,8 @@ class IncidentExport implements FromQuery, WithMapping, WithHeadings
             $status = "Deleted";
         } else if ($data == 5) {
             $status = "Resolved";
+        } else if ($data == 6) {
+            $status = "Re-Open";
         }
         return $status;
     }

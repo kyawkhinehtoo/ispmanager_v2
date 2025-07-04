@@ -56,6 +56,7 @@
               tabindex="5" @change="changeStatus">
               <option value="0">All Status</option>
               <option value="1">Open</option>
+              <option value="6">Re-Open</option>
               <option value="2">Escalated</option>
               <option value="5">Resolved</option>
               <option value="3">Closed</option>
@@ -424,6 +425,7 @@
                           <select v-model="form.status"
                             class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300">
                             <option value="1">Open</option>
+                            <option value="6">Re-Open</option>
                             <option value="2" disabled>Escalated</option>
                             <option value="5" disabled>Resolved</option>
                             <option value="3">Closed</option>
@@ -978,6 +980,8 @@ export default {
         status = "Deleted";
       } else if (data == 5) {
         status = "Resolved";
+      } else if (data == 6) {
+        status = "Re-Open";
       }
       return status;
     }
